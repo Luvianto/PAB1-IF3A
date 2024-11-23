@@ -27,10 +27,10 @@ class ProfileInfoItem extends StatelessWidget {
           child: Row(
             children: [
               Icon(icon, color: iconColor),
-              SizedBox(width: 8),
+              const SizedBox(width: 8),
               Text(
                 label,
-                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
               )
             ],
           ),
@@ -38,13 +38,13 @@ class ProfileInfoItem extends StatelessWidget {
         Expanded(
           child: Text(
             ': $value',
-            style: TextStyle(fontSize: 18),
+            style: const TextStyle(fontSize: 18),
           ),
         ),
         if (showEditIcon)
           InkWell(
             onTap: onEditPressed,
-            child: Icon(Icons.edit),
+            child: const Icon(Icons.edit),
           ),
       ],
     );

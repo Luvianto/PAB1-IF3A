@@ -15,12 +15,12 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       //TODO 1 : appbar
-      appBar: AppBar(title: Text("Wisata Candi")),
+      appBar: AppBar(title: const Text("Wisata Candi")),
       //TODO 2 : Gridiview Builder
       body: GridView.builder(
         gridDelegate:
-            SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 2),
-        padding: EdgeInsets.all(8),
+            const SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 2),
+        padding: const EdgeInsets.all(8),
         itemCount: candiList.length,
         itemBuilder: (context, index) {
           //TODO 3 : ItemCard

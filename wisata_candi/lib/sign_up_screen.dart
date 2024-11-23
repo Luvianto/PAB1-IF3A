@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class SignUpScreen extends StatefulWidget {
   const SignUpScreen({super.key});
@@ -15,7 +16,9 @@ class _SignUpScreenState extends State<SignUpScreen> {
   String _errorText = "";
   bool _obscurePassword = true;
   //TODO 1 : Fungsi Signup
-  void _signUp() {
+  void _signUp() async {
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+
     String name = _nameController.text.trim();
     String username = _usernameController.text.trim();
     String password = _passwordController.text.trim();
@@ -36,10 +39,11 @@ class _SignUpScreenState extends State<SignUpScreen> {
       });
     }
 
-    print("Sign Up Berhasil");
-    print("Nama : $name");
-    print("Nama Pengguna : $username");
-    print("Password : $password");
+    prefs.setString('name', name);
+    prefs.setString('username', username);
+    prefs.setString('password', password);
+
+    Navigator.pushReplacementNamed(context, '/signin');
   }
 
   //TODO 2 : Fungsi Dispose
@@ -68,7 +72,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
             children: [
               TextFormField(
                 controller: _nameController,
-                decoration: InputDecoration(
+                decoration: const InputDecoration(
                   labelText: "Nama",
                   border: OutlineInputBorder(),
                 ),
@@ -76,7 +80,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
               const SizedBox(height: 20),
               TextFormField(
                 controller: _usernameController,
-                decoration: InputDecoration(
+                decoration: const InputDecoration(
                   labelText: "Nama Pengguna",
                   border: OutlineInputBorder(),
                 ),
@@ -87,7 +91,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                 decoration: InputDecoration(
                   labelText: "Kata Sandi",
                   errorText: _errorText.isNotEmpty ? _errorText : null,
-                  border: OutlineInputBorder(),
+                  border: const OutlineInputBorder(),
                   suffixIcon: IconButton(
                     onPressed: () {
                       setState(() {

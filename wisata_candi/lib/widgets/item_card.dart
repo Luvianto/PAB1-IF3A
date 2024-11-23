@@ -23,7 +23,7 @@ class ItemCard extends StatelessWidget {
       },
       child: Card(
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
-        margin: EdgeInsets.all(4),
+        margin: const EdgeInsets.all(4),
         elevation: 1,
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -44,7 +44,7 @@ class ItemCard extends StatelessWidget {
               padding: const EdgeInsets.only(left: 16, top: 8),
               child: Text(
                 candi.name,
-                style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
               ),
             ),
             //TODO 5 : Text
@@ -52,7 +52,7 @@ class ItemCard extends StatelessWidget {
               padding: const EdgeInsets.only(left: 16, bottom: 8),
               child: Text(
                 candi.type,
-                style: TextStyle(fontSize: 12),
+                style: const TextStyle(fontSize: 12),
               ),
             )
           ],

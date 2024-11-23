@@ -3,6 +3,7 @@ import 'package:wisata_candi/favorite_screen.dart';
 import 'package:wisata_candi/home_screen.dart';
 import 'package:wisata_candi/profil_screen.dart';
 import 'package:wisata_candi/search_screen.dart';
+import 'package:wisata_candi/sign_in_screen.dart';
 import 'package:wisata_candi/sign_up_screen.dart';
 
 void main() {
@@ -15,22 +16,28 @@ class MainApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-        theme: ThemeData(
-          appBarTheme: const AppBarTheme(
-            iconTheme: IconThemeData(color: Colors.deepPurple),
-            titleTextStyle: TextStyle(
-                color: Colors.deepPurple,
-                fontSize: 20,
-                fontWeight: FontWeight.bold),
-          ),
-          colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple)
-              .copyWith(
-                  primary: Colors.deepPurple, surface: Colors.deepPurple[50]),
+      theme: ThemeData(
+        appBarTheme: const AppBarTheme(
+          iconTheme: IconThemeData(color: Colors.deepPurple),
+          titleTextStyle: TextStyle(
+              color: Colors.deepPurple,
+              fontSize: 20,
+              fontWeight: FontWeight.bold),
         ),
-        title: "Wisata Candi",
-        home: SignUpScreen()
-        //MainScreen(),
-        );
+        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple)
+            .copyWith(
+                primary: Colors.deepPurple, surface: Colors.deepPurple[50]),
+      ),
+      title: "Wisata Candi",
+      // home: const SignUpScreen(),
+      initialRoute: '/signin',
+      routes: {
+        '/homescreen': (context) => const MainScreen(),
+        '/signin': (context) => const SignInScreen(),
+        '/signup': (context) => const SignUpScreen(),
+      },
+      //MainScreen(),
+    );
   }
 }
 
@@ -45,10 +52,10 @@ class _MainScreenState extends State<MainScreen> {
   //TODO 1 : Deklarasi Var
   int _currentIndex = 0;
   final List<Widget> _children = [
-    HomeScreen(),
-    SearchScreen(),
-    FavoriteScreen(),
-    ProfileScreen(),
+    const HomeScreen(),
+    const SearchScreen(),
+    const FavoriteScreen(),
+    const ProfileScreen(),
   ];
   @override
   Widget build(BuildContext context) {

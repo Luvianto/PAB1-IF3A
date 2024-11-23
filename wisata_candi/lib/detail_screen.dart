@@ -1,14 +1,62 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:wisata_candi/data/candi_data.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:wisata_candi/models/candi.dart';
 
-class DetailScreen extends StatelessWidget {
+class DetailScreen extends StatefulWidget {
   final Candi candi;
   const DetailScreen({
     super.key,
     required this.candi,
   });
+
+  @override
+  State<DetailScreen> createState() => _DetailScreenState();
+}
+
+class _DetailScreenState extends State<DetailScreen> {
+  bool isFavorite = false;
+  bool isSignedIn = false;
+
+  @override
+  void initState() {
+    super.initState();
+    _checkSignInStatus();
+    _loadFavoriteStatus();
+  }
+
+  void _checkSignInStatus() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    bool signedIn = prefs.getBool('isSignedIn') ?? false;
+    setState(() {
+      isSignedIn = signedIn;
+    });
+  }
+
+  void _loadFavoriteStatus() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    bool favorite = prefs.getBool('favorite_${widget.candi.name}') ?? false;
+    setState(() {
+      isFavorite = favorite;
+    });
+  }
+
+  Future<void> _toogleFavorite() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+
+    if (!isSignedIn) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        Navigator.pushReplacementNamed(context, '/signin');
+      });
+      return;
+    }
+    bool favoriteStatus = !isFavorite;
+    prefs.setBool('favorite_${widget.candi.name}', favoriteStatus);
+
+    setState(() {
+      isFavorite = favoriteStatus;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -25,7 +73,7 @@ class DetailScreen extends StatelessWidget {
                   child: ClipRRect(
                     borderRadius: BorderRadius.circular(20),
                     child: Image.asset(
-                      candi.imageAsset,
+                      widget.candi.imageAsset,
                       height: 300,
                       width: double.infinity,
                       fit: BoxFit.cover,
@@ -66,10 +114,15 @@ class DetailScreen extends StatelessWidget {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Text(candi.name),
+                      Text(widget.candi.name),
                       IconButton(
-                        onPressed: () {},
-                        icon: const Icon(Icons.favorite_border),
+                        onPressed: _toogleFavorite,
+                        icon: Icon(
+                          isSignedIn && isFavorite
+                              ? Icons.favorite
+                              : Icons.favorite_border,
+                          color: isSignedIn && isFavorite ? Colors.red : null,
+                        ),
                       ),
                     ],
                   ),
@@ -90,7 +143,7 @@ class DetailScreen extends StatelessWidget {
                           ),
                         ),
                       ),
-                      Text(': ${candi.location}'),
+                      Text(': ${widget.candi.location}'),
                     ],
                   ),
                   const SizedBox(height: 2),
@@ -110,7 +163,7 @@ class DetailScreen extends StatelessWidget {
                           ),
                         ),
                       ),
-                      Text(': ${candi.built}'),
+                      Text(': ${widget.candi.built}'),
                     ],
                   ),
                   const SizedBox(height: 2),
@@ -130,7 +183,7 @@ class DetailScreen extends StatelessWidget {
                           ),
                         ),
                       ),
-                      Text(': ${candi.type}'),
+                      Text(': ${widget.candi.type}'),
                     ],
                   ),
                   const SizedBox(height: 16),
@@ -141,7 +194,7 @@ class DetailScreen extends StatelessWidget {
                     style: TextStyle(fontWeight: FontWeight.bold),
                   ),
                   const SizedBox(height: 16),
-                  Text(candi.description),
+                  Text(widget.candi.description),
                   const SizedBox(height: 16),
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
@@ -161,7 +214,7 @@ class DetailScreen extends StatelessWidget {
                         height: 100,
                         child: ListView.builder(
                             scrollDirection: Axis.horizontal,
-                            itemCount: candi.imageUrls.length,
+                            itemCount: widget.candi.imageUrls.length,
                             itemBuilder: (context, index) {
                               return Padding(
                                 padding: const EdgeInsets.only(left: 8),
@@ -172,7 +225,7 @@ class DetailScreen extends StatelessWidget {
                                     child: ClipRRect(
                                       borderRadius: BorderRadius.circular(10),
                                       child: CachedNetworkImage(
-                                        imageUrl: candi.imageUrls[index],
+                                        imageUrl: widget.candi.imageUrls[index],
                                         placeholder: (context, url) =>
                                             Container(
                                           width: 120,
